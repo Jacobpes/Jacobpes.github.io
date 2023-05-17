@@ -58,7 +58,6 @@ class Login extends HTMLElement{
             <div class="main__logo-title">
                 <a href="" class="mainlogo__link" id="mainlogo">
                     <h1>My intrack</h1> <br>
-                    <h6>By Jacob</h6>
                 </a>
             </div>
         </div>
