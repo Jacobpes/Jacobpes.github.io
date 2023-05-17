@@ -12,7 +12,8 @@ class Login extends HTMLElement{
         }
         if (!validLoginForm(formData)) {
             e.preventDefault();
-            console.log("invalid login form");
+            // set error message to "Invalid login form"
+            document.getElementById('loginErrorMessage').innerHTML = "Invalid login form";
             return false;
         };
         const credentials = `${username}:${password}`;
@@ -29,7 +30,6 @@ class Login extends HTMLElement{
     
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
                 localStorage.setItem('jwt', data);
                 // go to dashboard
                 location.reload();
@@ -38,7 +38,8 @@ class Login extends HTMLElement{
             }
         }
         catch (error) {
-            console.log(error);
+           // set error message to "wrong username or password"
+              document.getElementById('loginErrorMessage').innerHTML = "Wrong username or password";
         }
     }
     connectedCallback() {

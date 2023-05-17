@@ -1,7 +1,6 @@
 class Dashboard extends HTMLElement{
     constructor() {
         super();
-        console.log("super run first");
         this.loadUserData();
       }
 
@@ -9,7 +8,6 @@ class Dashboard extends HTMLElement{
         const jwt = localStorage.getItem("jwt");
         const decodedJwt = this.decodeJwt(jwt);
         const response = await this.getQuery(decodedJwt.sub, jwt);
-        console.log("this is res", response);
 
         this.render(response.data);
     }
@@ -129,12 +127,8 @@ class Dashboard extends HTMLElement{
     return color;
   };
   
-  logOut(event) {
-    console.log('Log out button clicked.')
-    // event.preventDefault();
-    console.log('Log out button clicked.')
+  logOut() {
     localStorage.removeItem('jwt');
-    console.log('JWT token removed from local storage.');
     location.reload();
   }
 
@@ -180,8 +174,6 @@ let rectString = '';
 skills.forEach((skill, index) => {
   const x = index * barWidth;
   const y = 370 - skill.amount * barHeight;
-  console.log('x', x);
-  console.log('y', y);
 
   const width = barWidth;
   const height = skill.amount * barHeight;
@@ -199,8 +191,6 @@ skills.forEach((skill, index) => {
 
     // Append the rectangles to the SVG string
     const svgWithRectsString = svgString.replace('</svg>', rectString + '</svg>');
-
-    console.log(svgWithRectsString);
   
     this.innerHTML = 
     `<div class="container">`
@@ -249,7 +239,6 @@ skills.forEach((skill, index) => {
     + svgWithRectsString +
     `</div>`;
     const logoutBtn = document.querySelector("#logout-btn");
-    console.log("logoutBtn", logoutBtn);
     logoutBtn.addEventListener("click", this.logOut);
     
   }

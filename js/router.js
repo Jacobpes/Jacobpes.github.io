@@ -1,4 +1,3 @@
-console.log('router.js loaded');
 const urlRoutes = {
     '/': {
         template: "<dashboard-page></dashboard-page>"
@@ -10,13 +9,11 @@ const urlRoutes = {
 
 
 const urlRoute = (path) => {
-    console.log(path)
     urlLocationHolder()
 };
 
 const urlLocationHolder = async () => {
     var location = window.location.pathname;
-    console.log(location)
 
     var jwt = localStorage.getItem('jwt');
 
