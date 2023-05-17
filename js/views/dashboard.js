@@ -3,7 +3,7 @@ class Dashboard extends HTMLElement{
         super();
         this.loadUserData();
       }
-
+    // load user data from 01.gritlab
     async loadUserData() {
         const jwt = localStorage.getItem("jwt");
         const decodedJwt = this.decodeJwt(jwt);
@@ -102,7 +102,7 @@ class Dashboard extends HTMLElement{
     console.log(error);
     throw new Error("Failed to fetch data from GraphQL API");
   }
-
+// decodes the jwt token
   decodeJwt(jwt) {
     const base64Url = jwt.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -110,7 +110,7 @@ class Dashboard extends HTMLElement{
     const result = JSON.parse(decoded);
     return result;
   }
-
+  // calculates the total xp amount
   totalXPAmount(xps) {
     let xp_total = 0;
     for (let i = 0; i < xps.length; i++) {
@@ -118,7 +118,7 @@ class Dashboard extends HTMLElement{
     }
     return xp_total;
   }
-
+ // creates a random color for the graph
   randomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -127,12 +127,12 @@ class Dashboard extends HTMLElement{
     }
     return color;
   };
-  
+  // logs out the user by removing the jwt token and reloading the page
   logOut() {
     localStorage.removeItem('jwt');
     location.reload();
   }
-
+  // renders the dashboard
   connectedCallback() {
     this.render();
   }

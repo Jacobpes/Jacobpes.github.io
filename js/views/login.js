@@ -5,30 +5,29 @@ class Login extends HTMLElement{
     // login function to login user or show error message
     async login(e){
         e.preventDefault();
-        const username = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
+        // get form data from login form
         let formData = {
             "emailUsername": document.getElementById("loginUsername").value,
             "password": document.getElementById("loginPassword").value,
         }
+        // validate login form
         if (!validLoginForm(formData)) {
-            e.preventDefault();
-            // set error message to "Invalid login form"
-            document.getElementById('loginErrorMessage').innerHTML = "Invalid login form";
             return false;
         };
-        const credentials = `${username}:${password}`;
+        // convert username and password to base64 encoded string and add to headers
+        const credentials = `${formData.emailUsername}:${formData.password}`;
         const encodedCredentials = new TextEncoder().encode(credentials);
         const base64Credentials = fromByteArray(encodedCredentials);
         const headers = new Headers();
         headers.append('Authorization', 'Basic ' + base64Credentials);
         headers.append('Content-Type', 'application/json');
+        // send login request to 01.gritlab signin endpoint
         try {
             const response = await fetch('https://01.gritlab.ax/api/auth/signin', {
                 method: 'POST',
                 headers: headers,
             })
-    
+            // if response is ok, save jwt token to localstorage and reload page
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('jwt', data);
@@ -39,12 +38,14 @@ class Login extends HTMLElement{
             }
         }
         catch (error) {
+            // if response is not ok, show error message at login form
             let loginErr = document.getElementById('loginUsernameErrMsg')
             if (loginErr) {
                 loginErr.innerHTML = "Wrong username/email or password";;
             }
         }
     }
+    // render login form
     connectedCallback() {
         this.render();
         this.addEventListener('submit', this.login);
@@ -98,7 +99,7 @@ function fromByteArray(uint8array) {
 
 customElements.define("login-page", Login);
 
-// function to validate login form
+// function to validate login form and show error messages if empty
 function validLoginForm(formData){
     const usernameErrMsg =  document.getElementById("loginUsernameErrMsg")
     const passwordErrMsg =  document.getElementById("loginPasswordErrMsg")
@@ -108,29 +109,25 @@ function validLoginForm(formData){
         password: true,
     }
     
-// check if username is empty
-if (formData.username == ""){
-    valid.username = false;
+    // check if username is empty
+    if (formData.username == ""){
+        usernameErrMsg.classList.add("form__input-error-message");
+        usernameErrMsg.innerHTML = "Username is required";
+        valid.username = false;
     } else {
-        // check if usernameemail is valid username or email
-        const emailRegex = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
-        const usernameRegex = new RegExp(/^[åäöÅÄÖA-Za-z0-9]+$/);
-        if (!(usernameRegex.test(formData.username) || emailRegex.test(formData.username))){
-            usernameErrMsg.innerHTML = "Username is invalid";
-            valid.username = false;
-        } else {
-            // else username is valid
-            usernameErrMsg.classList.remove("form__input-error-message");
-            usernameErrMsg.innerHTML = "";
-            valid.username = true;
-        }
+        // else username is valid
+        usernameErrMsg.classList.remove("form__input-error-message");
+        usernameErrMsg.innerHTML = "";
+        valid.username = true;
     }
 
     // check if password is empty
     if (formData.password == ""){
         passwordErrMsg.classList.add("form__input-error-message");
+        passwordErrMsg.innerHTML = "Password is required";
         valid.password = false;
     } else {
+        // else password is valid
         passwordErrMsg.classList.remove("form__input-error-message");
         passwordErrMsg.innerHTML = "";
         valid.password = true;
