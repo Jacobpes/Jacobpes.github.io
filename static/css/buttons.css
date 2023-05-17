@@ -105,7 +105,6 @@
     cursor: pointer;
 }
 
-/* screen media for 1280 */
 @media screen and (max-width: 1280px){
     .topnav__button {
         height: 40px;

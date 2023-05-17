@@ -12,6 +12,7 @@ class Dashboard extends HTMLElement{
         this.render(response.data);
     }
 
+    // gets the queries
   async getQuery(id, jwt) {
     const query = `
     query {
@@ -168,7 +169,6 @@ class Dashboard extends HTMLElement{
       </div>
   `;
 
-    // test
     // Determine the maximum value of the data
     const maxAmount = Math.max(...skills.map(skill => skill.amount));
 
@@ -194,7 +194,6 @@ skills.forEach((skill, index) => {
   
   rectString += `<text x="${textAmountX}" y="${textAmountY}" fill="white" text-anchor="middle">${skill.amount}</text>`;
 })
-
 
     // Append the rectangles to the SVG string
     const svgWithRectsString = svgString.replace('</svg>', rectString + '</svg>');

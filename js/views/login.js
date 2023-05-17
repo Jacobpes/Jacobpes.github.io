@@ -2,6 +2,7 @@ class Login extends HTMLElement{
     constructor(){
         super();
     }
+    // login function to login user or show error message
     async login(e){
         e.preventDefault();
         const username = document.getElementById('loginUsername').value;
@@ -94,12 +95,14 @@ class Login extends HTMLElement{
     }
 }
 
+// function to convert byte array to base64 encoded string  
 function fromByteArray(uint8array) {
     return btoa(String.fromCharCode.apply(null, uint8array));
 }
 
 customElements.define("login-page", Login);
 
+// function to validate login form
 function validLoginForm(formData){
     const usernameErrMsg =  document.getElementById("loginUsernameErrMsg")
     const passwordErrMsg =  document.getElementById("loginPasswordErrMsg")
@@ -108,6 +111,7 @@ function validLoginForm(formData){
         username: true,
         password: true,
     }
+    
 // check if username is empty
 if (formData.username == ""){
     valid.username = false;

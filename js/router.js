@@ -7,11 +7,12 @@ const urlRoutes = {
     },
 };
 
-
+// urlRoute is called when the url changes
 const urlRoute = (path) => {
     urlLocationHolder()
 };
 
+// urlLocationHolder is called when the url changes
 const urlLocationHolder = async () => {
     var location = window.location.pathname;
 

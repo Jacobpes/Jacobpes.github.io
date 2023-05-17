@@ -14,7 +14,6 @@ body, html{
     margin:0;
     display: flex;
 
-    /* website to auto-fit in the page */
     position: absolute;
     top:0;
     bottom:0;
