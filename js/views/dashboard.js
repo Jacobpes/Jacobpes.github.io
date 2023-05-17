@@ -136,22 +136,29 @@ class Dashboard extends HTMLElement{
     this.render();
   }
   disconnectedCallback() {}
-
+  
   render(data) {
     const skills = [];
-    data.skills.forEach((skill) => {
-        if (skill.type.startsWith("skill_")) {
-          const existingSkill = skills.find((s) => s.skill === skill.type.slice(6));
-          if (existingSkill) {
-            existingSkill.amount += skill.amount;
-          } else {
-            skills.push({
-              skill: skill.type.slice(6),
-              amount: skill.amount,
-            });
+    if (data) {
+      if (data.skills) {
+        data.skills.forEach((skill) => {
+          if (skill.type.startsWith("skill_")) {
+            const existingSkill = skills.find((s) => s.skill === skill.type.slice(6));
+            if (existingSkill) {
+              existingSkill.amount += skill.amount;
+            } else {
+              skills.push({
+                skill: skill.type.slice(6),
+                amount: skill.amount,
+              });
+            }
           }
-        }
-      });
+        });
+      }
+    }
+    if (!data) {
+      return;
+    }
 
       const svgString = `
       <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark">
