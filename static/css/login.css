@@ -6,7 +6,7 @@
 
 .container__left{
     display: flex;
-    background: url(/static/images/login.png);
+    background: url(/static/images/login.jpeg);
     height: 100vh;
     width:40%;
     background-size: cover;

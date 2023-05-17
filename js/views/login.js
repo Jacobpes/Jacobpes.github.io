@@ -57,8 +57,8 @@ class Login extends HTMLElement{
         <div class="container__left">
             <div class="main__logo-title">
                 <a href="" class="mainlogo__link" id="mainlogo">
-                    <h1>GraphQL</h1>
-                    <h6>By Nafi</h6>
+                    <h1>My intrack</h1> <br>
+                    <h6>By Jacob</h6>
                 </a>
             </div>
         </div>
@@ -87,9 +87,6 @@ class Login extends HTMLElement{
     
                 <!--submit button-->
                 <input type="submit" class="form__button" id="loginSubmit" value="Submit">
-                <p class="form__text">
-                    <a href="#" class="form__link" id="linkRegister">Not a user? Register</a>
-                </p>
             </form>
         </div>`
     }
