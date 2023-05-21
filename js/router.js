@@ -1,3 +1,4 @@
+// Set the routes for the different pages
 const urlRoutes = {
     '/': {
         template: "<dashboard-page></dashboard-page>"
@@ -16,16 +17,17 @@ const urlRoute = (path) => {
 const urlLocationHolder = async () => {
     var location = window.location.pathname;
 
+    // Go to login page if not logged in
     var jwt = localStorage.getItem('jwt');
-
     if (jwt == null && location == '/') {
         location = '/login';
     };
-
     const route = urlRoutes[location];
-    const htmml = route.template;
-    document.getElementById('main').innerHTML = htmml;
-};
+    const html = route.template;
 
+    // View the right element according to the location
+    document.getElementById('main').innerHTML = html;
+};
+// Call the urlLocationHolder function when the page loads to make sure the right element is shown
 window.route = urlRoute;
 urlLocationHolder();

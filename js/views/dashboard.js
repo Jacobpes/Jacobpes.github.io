@@ -1,14 +1,14 @@
 class Dashboard extends HTMLElement{
-    constructor() {
-        super();
-        this.loadUserData();
-      }
-    // load user data from 01.gritlab
+  constructor() {
+      super();
+      this.loadUserData();
+    }
+
+    // load user data from 01.gritlab with the jwt token
     async loadUserData() {
         const jwt = localStorage.getItem("jwt");
         const decodedJwt = this.decodeJwt(jwt);
         const response = await this.getQuery(decodedJwt.sub, jwt);
-
         this.render(response.data);
     }
 
@@ -102,7 +102,7 @@ class Dashboard extends HTMLElement{
     console.log(error);
     throw new Error("Failed to fetch data from GraphQL API");
   }
-// decodes the jwt token
+  // decodes the jwt token
   decodeJwt(jwt) {
     const base64Url = jwt.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -137,7 +137,7 @@ class Dashboard extends HTMLElement{
     this.render();
   }
   disconnectedCallback() {}
-  
+  // render the dashboard with the data from the query
   render(data) {
     const skills = [];
     if (data) {
@@ -160,7 +160,7 @@ class Dashboard extends HTMLElement{
     if (!data) {
       return;
     }
-
+    // create the default svg string
       const svgString = `
       <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark">
           <p class="lead text-white">Skills</p>
@@ -168,44 +168,42 @@ class Dashboard extends HTMLElement{
            </svg>
       </div>
   `;
+  // Determine the maximum value of the data
+  const maxAmount = Math.max(...skills.map(skill => skill.amount));
+  // Define the dimensions of the bars
+  const barWidth = 800 / skills.length;
+  const barHeight = 400 / maxAmount;
 
-    // Determine the maximum value of the data
-    const maxAmount = Math.max(...skills.map(skill => skill.amount));
-
-    // Define the dimensions of the bars
-    const barWidth = 800 / skills.length;
-    const barHeight = 400 / maxAmount;
-
-// Create a rectangle and text for each data point
-let rectString = '';
-skills.forEach((skill, index) => {
-  const x = index * barWidth;
-  const y = 370 - skill.amount * barHeight;
-
-  const width = barWidth;
-  const height = skill.amount * barHeight;
-  // const fill = this.randomColor();
-  rectString += `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="#0074D9"/>`;
-  const textSkillX = x + barWidth / 2;
-  rectString += `<text x="${textSkillX}" y="390" fill="white" text-anchor="middle">${skill.skill.replace('-', '')}</text>`;
-
-  const textAmountX = x + barWidth / 2;
-  const textAmountY = y + height / 2;
-  
-  rectString += `<text x="${textAmountX}" y="${textAmountY}" fill="white" text-anchor="middle">${skill.amount}</text>`;
-})
-
+  // Create a rectangle and text for each data point
+  let rectString = '';
+  skills.forEach((skill, index) => {
+    // Calculate the position of the bar
+    const x = index * barWidth;
+    const y = 370 - skill.amount * barHeight;
+    // Set the dimensions of the bar 
+    const width = barWidth;
+    const height = skill.amount * barHeight;
+    // Create the SVG string for the rectangle
+    rectString += `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="#0074D9"/>`;
+    const textSkillX = x + barWidth / 2;
+    // Create the HTML string for the skill text
+    rectString += `<text x="${textSkillX}" y="390" fill="white" text-anchor="middle">${skill.skill.replace('-', '')}</text>`;
+    // Calculate the position of the amount text
+    const textAmountX = x + barWidth / 2;
+    const textAmountY = y + height / 2;
+    // Create the HTML string for the amount text
+    rectString += `<text x="${textAmountX}" y="${textAmountY}" fill="white" text-anchor="middle">${skill.amount}</text>`;
+  });
     // Append the rectangles to the SVG string
     const svgWithRectsString = svgString.replace('</svg>', rectString + '</svg>');
-  
+    // Create the page content by setting the inner HTML of the custom element
     this.innerHTML = 
     `<div class="container">`
     + 
     `<div class="py-5 text-center">
         <h2>Welcome, ${data.user[0].firstName} ${data.user[0].lastName}!</h2>
         <button id="logout-btn" class="btn btn-lg w-25 mx-auto btn-primary btn-block" type="button">Log Out</button>
-
-        </div>
+    </div>
 
         <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
             <div class="col-md-7 p-lg-5 mx-auto my-1">
@@ -223,30 +221,30 @@ skills.forEach((skill, index) => {
         </div>
 
         <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark">
-            
-                    <p class="lead text-white">Audits Ratio</p>
-            
-                    <svg width="400" height="150">
-                    <!-- Done bar -->
-                    <rect x="0" y="25" width="${Math.round(data.user[0].totalUp/10000)}" height="50" fill="#0074D9"/>
-                    <text x="0" y="20" fill="#FFFFFF" font-size="14">Done: </text>
-                    <text x="50" y="20" fill="#FFFFFF" font-size="14">${Math.round(data.user[0].totalUp/1000)} kB</text>
+            <p class="lead text-white">Audits Ratio</p>
+    
+            <svg width="400" height="150">
+            <!-- Done bar -->
+            <rect x="0" y="25" width="${Math.round(data.user[0].totalUp/10000)}" height="50" fill="#0074D9"/>
+            <text x="0" y="20" fill="#FFFFFF" font-size="14">Done: </text>
+            <text x="50" y="20" fill="#FFFFFF" font-size="14">${Math.round(data.user[0].totalUp/1000)} kB</text>
 
-                    <rect x="50" y="75" width="220" height="10" fill="#353A35"/>
+            <rect x="50" y="75" width="220" height="10" fill="#353A35"/>
 
-                    <!-- Received bar -->
-                    <rect x="0" y="105" width="${Math.round(data.user[0].totalDown/10000)}" height="50" fill="#FF4136"/>
-                    <text x="0" y="100" fill="#FFFFFF" font-size="14">Received: </text>
-                    <text x="70" y="100" fill="#FFFFFF" font-size="14">${Math.round(data.user[0].totalDown/1000)} kB</text>
-                    </svg>
-                    <h3 class="display-4 text-white">${Number(data.user[0].auditRatio.toFixed(1))}</h3>            
-                    
-    </div>`
+            <!-- Received bar -->
+            <rect x="0" y="105" width="${Math.round(data.user[0].totalDown/10000)}" height="50" fill="#FF4136"/>
+            <text x="0" y="100" fill="#FFFFFF" font-size="14">Received: </text>
+            <text x="70" y="100" fill="#FFFFFF" font-size="14">${Math.round(data.user[0].totalDown/1000)} kB</text>
+            </svg>
+            <h3 class="display-4 text-white">${Number(data.user[0].auditRatio.toFixed(1))}</h3>             
+        </div>`
     + svgWithRectsString +
     `</div>`;
+    // Add an event listener to the logout button
     const logoutBtn = document.querySelector("#logout-btn");
     logoutBtn.addEventListener("click", this.logOut);
-    
   }
 }
-  customElements.define("dashboard-page", Dashboard);
+
+// register the custom element
+customElements.define("dashboard-page", Dashboard);

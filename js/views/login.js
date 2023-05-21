@@ -101,9 +101,8 @@ customElements.define("login-page", Login);
 
 // function to validate login form and show error messages if empty
 function validLoginForm(formData){
-    const usernameErrMsg =  document.getElementById("loginUsernameErrMsg")
-    const passwordErrMsg =  document.getElementById("loginPasswordErrMsg")
-
+    const usernameErrMsg = document.getElementById("loginUsernameErrMsg")
+    const passwordErrMsg = document.getElementById("loginPasswordErrMsg")
     let valid = {
         username: true,
         password: true,
@@ -115,7 +114,7 @@ function validLoginForm(formData){
         usernameErrMsg.innerHTML = "Username is required";
         valid.username = false;
     } else {
-        // else username is valid
+    // else username is valid
         usernameErrMsg.classList.remove("form__input-error-message");
         usernameErrMsg.innerHTML = "";
         valid.username = true;
@@ -127,7 +126,7 @@ function validLoginForm(formData){
         passwordErrMsg.innerHTML = "Password is required";
         valid.password = false;
     } else {
-        // else password is valid
+    // else password is valid
         passwordErrMsg.classList.remove("form__input-error-message");
         passwordErrMsg.innerHTML = "";
         valid.password = true;
